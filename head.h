@@ -29,6 +29,14 @@ struct ast //二叉树
 	struct ast *lc;	//子树
 	struct ast *rc;
 	struct namelist *namearg; //用于在参数定义时的多个变量
+
+	/*用于生成中间代码的变量,place的4种类型，*/
+	int i;		 //Integer
+	float f;	 //FLOAT
+	char id[30]; //变量名ID
+	int t;		 //临时变量t编号
+
+	int ptag; //用以标志place的类型1,2,3,4
 };
 //标记是否为数组类型，同时标记左右值
 void setarraytype(struct ast *ast, char *name, int arraymark, int rmark);

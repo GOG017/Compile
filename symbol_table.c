@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+int used[100];
+
 void insertsym1(char *name, char *type_name, int arraytype) // 插入普通变量和数组变量到符号表中
 {
 	struct symbol *sym = (struct symbol *)malloc(sizeof(struct symbol));
@@ -83,8 +85,10 @@ char *checkstruct(char *name, char *name2, int line) // 判断是否为结构体
 			break;
 		sym = sym->next;
 	}
-	if (!flag1) error13(line);
-	else if (!flag2) error14(name2, line);
+	if (!flag1)
+		error13(line);
+	else if (!flag2)
+		error14(name2, line);
 	return p;
 }
 
@@ -229,7 +233,8 @@ void addfunc(char *name, struct namelist *namelist, int mark, int line) // 添�
 		char *initname = "int";
 		insertsym2(name, initname, mark, getarg(namelist));
 	}
-	else error4(name, line);
+	else
+		error4(name, line);
 }
 
 void addstruct(char *name, struct namelist *namelist, int mark, int line) // 添加结构体
@@ -305,4 +310,30 @@ void freesymbollist() // 清空符号列表
 		symbollist = symbollist->next;
 		free(tt);
 	}
+}
+
+/*关于中间代码的实现函数：创建临时变量&输出四元式*/
+int newtemp() //创建临时变量
+{
+	int i = 0;
+	for (i = 0; i < 100; ++i) //在used[]中找到一个没有被用过的编号
+	{
+		if (used[i] == 0)
+		{
+			used[i] = i + 1;
+			return i; //返回的编号就是t的编号
+		}
+	}
+}
+
+void emit(struct ast *tp) //输出四元式
+{
+	if (tp->ptag == 1) //place的值是INTEGER
+		printf("%d", tp->i);
+	else if (tp->ptag == 2)
+		printf("%2f", tp->f); //place的值是FLOAT
+	else if (tp->ptag == 3)
+		printf("%s", tp->id); //place的值是ID变量名字
+	else					  //place的值是临时变量编号
+		printf("t%d", tp->t);
 }

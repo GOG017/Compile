@@ -102,14 +102,74 @@ Dec:VarDec ASSIGNOP Exp {$$ = newast3(maketext("Dec"), $1, $2, $3); strcpy($$->n
 	|VarDec {$$ = newast1(maketext("Dec"), $1); strcpy($$->name, $1->name); $$->arraymark = $1->arraymark;}
 	;
 
-Exp:Exp ASSIGNOP Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0); error6($1->rmark,$1->line); error5($1,$3,$1->line);}
-	|Exp AND Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0);}
-	|Exp OR Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0);}
+Exp:Exp ASSIGNOP Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0); error6($1->rmark,$1->line); error5($1,$3,$1->line);
+		emit($1); //输出E1.place
+		printf("="); //输出‘=’
+		emit($3); //输出E2.place
+		printf("\n");
+	}
+	|Exp AND Exp 	{
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0);
+		$$->t = newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("&&");//输出‘&&’
+		emit($3);//输出E2.place 
+		printf("\n");
+	}
+	|Exp OR Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0);
+		$$->t = newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("||");//输出‘||’
+		emit($3);//输出E2.place
+		printf("\n");
+	}
 	|Exp RELOP Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"int",0,0);}
-	|Exp PLUS Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);}
-	|Exp MINUS Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);}
-	|Exp STAR Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);}
-	|Exp DIV Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);}
+	|Exp PLUS Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);
+		$$->t = newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("+");//输出‘+’
+		emit($3);//输出E2.place
+		printf("\n");
+	}
+	|Exp MINUS Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);
+		$$->t=newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("-");//输出‘-’
+		emit($3);//输出E2.place
+		printf("\n");
+	}
+	|Exp STAR Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);
+		$$->t=newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("*");//输出‘*’
+		emit($3);//输出E2.place
+		printf("\n");
+	}
+	|Exp DIV Exp {
+		$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$1->typename,0,0); error7($1,$3,$1->line);
+		$$->t=newtemp();//E.place等于新创建的临时变量
+		emit($$);//输出E.place
+		printf("=");//输出‘=’
+		emit($1);//输出E1.place
+		printf("/");//输出‘/’
+		emit($3);//输出E2.place
+		printf("\n");
+	}
 	|LP Exp RP {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,$2->typename,0,0);}
 	|MINUS Exp {$$ = newast2(maketext("Exp"), $1,$2); setarraytype($$,$2->typename,0,0);}
 	|NOT Exp {$$ = newast2(maketext("Exp"), $1,$2); setarraytype($$,"int",0,0);}
@@ -118,7 +178,11 @@ Exp:Exp ASSIGNOP Exp {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,"
 	|ID LP RP {$$ = newast3(maketext("Exp"), $1,$2,$3); error2($1->info.name,$1->line); setarraytype($$,$1->typename,0,1); error11($1->info.name,$1->line);}
 	|Exp LB Exp RB {$$ = newast4(maketext("Exp"), $1,$2,$3,$4); setarraytype($$,$1->typename,1,1);error12($3->typename,$1->line); error10($1->name,$1->line);}
 	|Exp DOT ID {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,checkstruct($1->typename,$3->info.name,$1->line),0,1);}
-	|ID {$$ = newast1(maketext("Exp"), $1); strcpy($$->name,$1->info.name); error1($$->name,$$->line); setarraytype($$,gettype($1->info.name),0,1);}
+	|ID {
+		$$ = newast1(maketext("Exp"), $1); strcpy($$->name,$1->info.name); error1($$->name,$$->line); setarraytype($$,gettype($1->info.name),0,1);
+		strcpy($$->id,	$1->name);//E.place=ID的名字
+		$$->ptag=3;//记录E.place的类型为3
+	}
 	|INT {$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"int",0,0);}
 	|FLOAT {$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"float",0,0);}
 	;
@@ -130,7 +194,6 @@ Args:Exp COMMA Args {$$ = newast3(maketext("Args"), $1,$2,$3); $$->namearg=addna
 //标记是否为数组类型，同时标记左右值
 void setarraytype(struct ast *ast, char *name, int arraymark, int rmark)
 {
-	
 	strcpy(ast->typename, name);
 	ast->arraymark = arraymark;
 	ast->rmark = rmark;

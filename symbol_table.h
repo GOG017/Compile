@@ -17,7 +17,7 @@ struct symbol
 	int functype;
 	struct arg *arg;
 	struct symbol *next;
-} *symbollist;
+} * symbollist;
 
 void insertsym1(char *name, char *type_name, int arraytype); // 插入普通变量和数组变量到符号表中
 
@@ -48,5 +48,9 @@ int getfunctype(char *name); // 获得符号的functype
 char *gettype(char *name); // 获得符号的type名字
 
 void freesymbollist(); // 清空符号列表
+
+int newtemp(); //创建临时变量
+
+void emit(struct ast *tp); //输出四元式
 
 #endif // SYMBOLTABLE_H_INCLUDED
