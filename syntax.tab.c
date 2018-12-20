@@ -472,9 +472,9 @@ static const yytype_uint8 yyrline[] =
       47,    50,    51,    53,    56,    58,    59,    61,    63,    64,
       65,    66,    67,    68,    69,    71,    72,    78,    80,    81,
       82,    83,    84,    85,    87,    91,    93,    95,    96,   101,
-     102,   105,   112,   113,   114,   115,   116,   117,   118,   119,
-     120,   121,   123,   124,   125,   126,   127,   128,   129,   131,
-     132
+     102,   105,   112,   122,   132,   133,   143,   153,   163,   173,
+     174,   175,   177,   178,   179,   180,   181,   186,   191,   197,
+     198
 };
 #endif
 
@@ -1594,131 +1594,197 @@ yyreduce:
   case 41:
 #line 105 "syntax.y" /* yacc.c:1646  */
     {
-	(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0); error6((yyvsp[-2].a)->rmark,(yyvsp[-2].a)->line); error5((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
-	emit((yyvsp[-2].a)); //输出E1.place
-    printf("="); //输出‘=’
-    emit((yyvsp[0].a)); //输出E2.place
-    printf("\n");
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0); error6((yyvsp[-2].a)->rmark,(yyvsp[-2].a)->line); error5((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
+		emit((yyvsp[-2].a)); //输出E1.place
+		printf("="); //输出‘=’
+		emit((yyvsp[0].a)); //输出E2.place
+		printf("\n");
 	}
 #line 1604 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
 #line 112 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
-#line 1610 "syntax.tab.c" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);
+		(yyval.a)->t = newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("&&");//输出‘&&’
+		emit((yyvsp[0].a));//输出E2.place 
+		printf("\n");
+	}
+#line 1619 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 113 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
-#line 1616 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 44:
-#line 114 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
-#line 1622 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 45:
-#line 115 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);}
-#line 1628 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 46:
-#line 116 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);}
+#line 122 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);
+		(yyval.a)->t = newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("||");//输出‘||’
+		emit((yyvsp[0].a));//输出E2.place
+		printf("\n");
+	}
 #line 1634 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 47:
-#line 117 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);}
+  case 44:
+#line 132 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
 #line 1640 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 118 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);}
-#line 1646 "syntax.tab.c" /* yacc.c:1646  */
+  case 45:
+#line 133 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
+		(yyval.a)->t = newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("+");//输出‘+’
+		emit((yyvsp[0].a));//输出E2.place
+		printf("\n");
+	}
+#line 1655 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 119 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-1].a)->typename,0,0);}
-#line 1652 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 50:
-#line 120 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast2(maketext("Exp"), (yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[0].a)->typename,0,0);}
-#line 1658 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 51:
-#line 121 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast2(maketext("Exp"), (yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
-#line 1664 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 52:
-#line 123 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast4(maketext("Exp"), (yyvsp[-3].a),(yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); error2((yyvsp[-3].a)->info.name,(yyvsp[-3].a)->line); setarraytype((yyval.a),(yyvsp[-3].a)->typename,0,1); error11((yyvsp[-3].a)->info.name,(yyvsp[-3].a)->line); error9((yyvsp[-3].a)->info.name,(yyvsp[-1].a)->namearg,(yyvsp[-3].a)->line);}
+  case 46:
+#line 143 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
+		(yyval.a)->t=newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("-");//输出‘-’
+		emit((yyvsp[0].a));//输出E2.place
+		printf("\n");
+	}
 #line 1670 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 124 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); error2((yyvsp[-2].a)->info.name,(yyvsp[-2].a)->line); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,1); error11((yyvsp[-2].a)->info.name,(yyvsp[-2].a)->line);}
-#line 1676 "syntax.tab.c" /* yacc.c:1646  */
+  case 47:
+#line 153 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
+		(yyval.a)->t=newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("*");//输出‘*’
+		emit((yyvsp[0].a));//输出E2.place
+		printf("\n");
+	}
+#line 1685 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 54:
-#line 125 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast4(maketext("Exp"), (yyvsp[-3].a),(yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-3].a)->typename,1,1);error12((yyvsp[-1].a)->typename,(yyvsp[-3].a)->line); error10((yyvsp[-3].a)->name,(yyvsp[-3].a)->line);}
-#line 1682 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 55:
-#line 126 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),checkstruct((yyvsp[-2].a)->typename,(yyvsp[0].a)->info.name,(yyvsp[-2].a)->line),0,1);}
-#line 1688 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 56:
-#line 127 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,(yyvsp[0].a)->info.name); error1((yyval.a)->name,(yyval.a)->line); setarraytype((yyval.a),gettype((yyvsp[0].a)->info.name),0,1);}
-#line 1694 "syntax.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 57:
-#line 128 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,"no"); setarraytype((yyval.a),"int",0,0);}
+  case 48:
+#line 163 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,0); error7((yyvsp[-2].a),(yyvsp[0].a),(yyvsp[-2].a)->line);
+		(yyval.a)->t=newtemp();//E.place等于新创建的临时变量
+		emit((yyval.a));//输出E.place
+		printf("=");//输出‘=’
+		emit((yyvsp[-2].a));//输出E1.place
+		printf("/");//输出‘/’
+		emit((yyvsp[0].a));//输出E2.place
+		printf("\n");
+	}
 #line 1700 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 58:
-#line 129 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,"no"); setarraytype((yyval.a),"float",0,0);}
+  case 49:
+#line 173 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-1].a)->typename,0,0);}
 #line 1706 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 59:
-#line 131 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast3(maketext("Args"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); (yyval.a)->namearg=addnamelist((yyvsp[0].a),(yyvsp[-2].a)->typename,(yyvsp[-2].a)->arraymark);}
+  case 50:
+#line 174 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast2(maketext("Exp"), (yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[0].a)->typename,0,0);}
 #line 1712 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
-  case 60:
-#line 132 "syntax.y" /* yacc.c:1646  */
-    {(yyval.a) = newast1(maketext("Args"), (yyvsp[0].a)); (yyval.a)->namearg=addnamelist((yyval.a),(yyvsp[0].a)->typename,(yyvsp[0].a)->arraymark);}
+  case 51:
+#line 175 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast2(maketext("Exp"), (yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),"int",0,0);}
 #line 1718 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
+  case 52:
+#line 177 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast4(maketext("Exp"), (yyvsp[-3].a),(yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); error2((yyvsp[-3].a)->info.name,(yyvsp[-3].a)->line); setarraytype((yyval.a),(yyvsp[-3].a)->typename,0,1); error11((yyvsp[-3].a)->info.name,(yyvsp[-3].a)->line); error9((yyvsp[-3].a)->info.name,(yyvsp[-1].a)->namearg,(yyvsp[-3].a)->line);}
+#line 1724 "syntax.tab.c" /* yacc.c:1646  */
+    break;
 
-#line 1722 "syntax.tab.c" /* yacc.c:1646  */
+  case 53:
+#line 178 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); error2((yyvsp[-2].a)->info.name,(yyvsp[-2].a)->line); setarraytype((yyval.a),(yyvsp[-2].a)->typename,0,1); error11((yyvsp[-2].a)->info.name,(yyvsp[-2].a)->line);}
+#line 1730 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 179 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast4(maketext("Exp"), (yyvsp[-3].a),(yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),(yyvsp[-3].a)->typename,1,1);error12((yyvsp[-1].a)->typename,(yyvsp[-3].a)->line); error10((yyvsp[-3].a)->name,(yyvsp[-3].a)->line);}
+#line 1736 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 180 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast3(maketext("Exp"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); setarraytype((yyval.a),checkstruct((yyvsp[-2].a)->typename,(yyvsp[0].a)->info.name,(yyvsp[-2].a)->line),0,1);}
+#line 1742 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 181 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,(yyvsp[0].a)->info.name); error1((yyval.a)->name,(yyval.a)->line); setarraytype((yyval.a),gettype((yyvsp[0].a)->info.name),0,1);
+		strcpy((yyval.a)->id,	(yyvsp[0].a)->info.name);	// E.place = ID的名字
+		(yyval.a)->ptag = 3;					// 记录E.place的类型为3
+	}
+#line 1752 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 186 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,"no"); setarraytype((yyval.a),"int",0,0);
+		(yyval.a)->i = (yyvsp[0].a)->info.in;	// E.place = value
+    	(yyval.a)->ptag = 1;			// 记录E.place的类型为1
+	}
+#line 1762 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 191 "syntax.y" /* yacc.c:1646  */
+    {
+		(yyval.a) = newast1(maketext("Exp"), (yyvsp[0].a)); strcpy((yyval.a)->name,"no"); setarraytype((yyval.a),"float",0,0);
+		(yyval.a)->f = (yyvsp[0].a)->info.fl;	// E.place = value
+		(yyval.a)->ptag = 2;			// 记录E.place的类型为2
+	}
+#line 1772 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 197 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast3(maketext("Args"), (yyvsp[-2].a),(yyvsp[-1].a),(yyvsp[0].a)); (yyval.a)->namearg=addnamelist((yyvsp[0].a),(yyvsp[-2].a)->typename,(yyvsp[-2].a)->arraymark);}
+#line 1778 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 198 "syntax.y" /* yacc.c:1646  */
+    {(yyval.a) = newast1(maketext("Args"), (yyvsp[0].a)); (yyval.a)->namearg=addnamelist((yyval.a),(yyvsp[0].a)->typename,(yyvsp[0].a)->arraymark);}
+#line 1784 "syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 1788 "syntax.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1946,10 +2012,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 134 "syntax.y" /* yacc.c:1906  */
+#line 200 "syntax.y" /* yacc.c:1906  */
 
 
-//标记是否为数组类型，同时标记左右值
+// 标记是否为数组类型，同时标记左右值
 void setarraytype(struct ast *ast, char *name, int arraymark, int rmark)
 {
 	strcpy(ast->typename, name);
@@ -1957,7 +2023,7 @@ void setarraytype(struct ast *ast, char *name, int arraymark, int rmark)
 	ast->rmark = rmark;
 }
 
-//添加新的变量名到名字列表
+// 添加新的变量名到名字列表
 struct namelist *addnamelist(struct ast *ast, char *name, int arraymark)
 {
 	if (ast->namearg == NULL)
@@ -1985,7 +2051,7 @@ struct namelist *addnamelist(struct ast *ast, char *name, int arraymark)
 	return ast->namearg;
 }
 
-//连接两个名字列表
+// 连接两个名字列表
 struct namelist *linknamelist(struct namelist *list1, struct namelist *list2)
 {
 	struct namelist *newlist = (struct namelist *)malloc(sizeof(struct namelist));
@@ -2036,7 +2102,7 @@ struct ast *newastinit(union Info info, int type, int line)
 	ast->type = type;
 	return ast;
 }
-//分别初始化 int,float,string的不同格式
+// 分别初始化 int,float,string的不同格式
 union Info makeint(int n)
 {
 	union Info info;
@@ -2141,8 +2207,10 @@ struct ast *newast7(union Info info, struct ast *a, struct ast *b, struct ast *c
 	g->rlength = 0;
 	return ast;
 }
+
+/* 释放树的空间，考虑搜索到的位置 */
 void freetree(struct ast *t)
-{ //释放树的空间，考虑搜索到的位置
+{ 
 	if (t->llength != 0)
 		freetree(t->lc);
 	if (t->rlength != 0)
@@ -2153,36 +2221,25 @@ void freetree(struct ast *t)
 void tracetree(struct ast *t, int l)
 {
 	int i;
-	if (strcmp(t->info.name, "null") != 0)
-	{ //当记录的不是null时
-		for (i = 0; i < l; ++i)
-		{ //对应所在层次
+	if (strcmp(t->info.name, "null") != 0) // 当记录的不是null时
+		for (i = 0; i < l; ++i)	// 对应所在层次
 			printf("  ");
-		}
-	}
+
 	if (t == NULL)
 	{
 		printf("null\n");
 		return;
 	}
 	if (t->type == INT)
-	{
 		printf("INT:%d\n", t->info.in);
-	}
 	else if (t->type == FLOAT)
-	{
 		printf("FLOAT:%f\n", t->info.fl);
-	}
 	else if (t->type == ID)
-	{
 		printf("ID:%s\n", t->info.name);
-	}
 	else if (t->type == TYPE)
-	{
 		printf("TYPE:%s\n", t->info.name);
-	}
-	else if (t->type != 0)
-	{ //对应标号的记录值，最开始是从258开始记录的
+	else if (t->type != 0) // 对应标号的记录值，最开始是从258开始记录的
+	{ 
 		printf("%s\n", name[t->type - 258]);
 	}
 	else if (strcmp(t->info.name, "null") == 0) {}
@@ -2212,7 +2269,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-void yyerror(char *msg)
-{ //错误信息
+void yyerror(char *msg)	// 错误信息
+{ 
 	fprintf(stderr, "Error Type B at line %d: %s\n", yylineno, msg);
 }

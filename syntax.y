@@ -180,18 +180,26 @@ Exp:Exp ASSIGNOP Exp {
 	|Exp DOT ID {$$ = newast3(maketext("Exp"), $1,$2,$3); setarraytype($$,checkstruct($1->typename,$3->info.name,$1->line),0,1);}
 	|ID {
 		$$ = newast1(maketext("Exp"), $1); strcpy($$->name,$1->info.name); error1($$->name,$$->line); setarraytype($$,gettype($1->info.name),0,1);
-		strcpy($$->id,	$1->name);//E.place=ID的名字
-		$$->ptag=3;//记录E.place的类型为3
+		strcpy($$->id,	$1->info.name);	// E.place = ID的名字
+		$$->ptag = 3;					// 记录E.place的类型为3
 	}
-	|INT {$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"int",0,0);}
-	|FLOAT {$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"float",0,0);}
+	|INT {
+		$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"int",0,0);
+		$$->i = $1->info.in;	// E.place = value
+    	$$->ptag = 1;			// 记录E.place的类型为1
+	}
+	|FLOAT {
+		$$ = newast1(maketext("Exp"), $1); strcpy($$->name,"no"); setarraytype($$,"float",0,0);
+		$$->f = $1->info.fl;	// E.place = value
+		$$->ptag = 2;			// 记录E.place的类型为2
+	}
 	;
 Args:Exp COMMA Args {$$ = newast3(maketext("Args"), $1,$2,$3); $$->namearg=addnamelist($3,$1->typename,$1->arraymark);}
 	|Exp {$$ = newast1(maketext("Args"), $1); $$->namearg=addnamelist($$,$1->typename,$1->arraymark);}
 	;
 %%
 
-//标记是否为数组类型，同时标记左右值
+// 标记是否为数组类型，同时标记左右值
 void setarraytype(struct ast *ast, char *name, int arraymark, int rmark)
 {
 	strcpy(ast->typename, name);
@@ -199,7 +207,7 @@ void setarraytype(struct ast *ast, char *name, int arraymark, int rmark)
 	ast->rmark = rmark;
 }
 
-//添加新的变量名到名字列表
+// 添加新的变量名到名字列表
 struct namelist *addnamelist(struct ast *ast, char *name, int arraymark)
 {
 	if (ast->namearg == NULL)
@@ -227,7 +235,7 @@ struct namelist *addnamelist(struct ast *ast, char *name, int arraymark)
 	return ast->namearg;
 }
 
-//连接两个名字列表
+// 连接两个名字列表
 struct namelist *linknamelist(struct namelist *list1, struct namelist *list2)
 {
 	struct namelist *newlist = (struct namelist *)malloc(sizeof(struct namelist));
@@ -278,7 +286,7 @@ struct ast *newastinit(union Info info, int type, int line)
 	ast->type = type;
 	return ast;
 }
-//分别初始化 int,float,string的不同格式
+// 分别初始化 int,float,string的不同格式
 union Info makeint(int n)
 {
 	union Info info;
@@ -383,8 +391,10 @@ struct ast *newast7(union Info info, struct ast *a, struct ast *b, struct ast *c
 	g->rlength = 0;
 	return ast;
 }
+
+/* 释放树的空间，考虑搜索到的位置 */
 void freetree(struct ast *t)
-{ //释放树的空间，考虑搜索到的位置
+{ 
 	if (t->llength != 0)
 		freetree(t->lc);
 	if (t->rlength != 0)
@@ -395,36 +405,25 @@ void freetree(struct ast *t)
 void tracetree(struct ast *t, int l)
 {
 	int i;
-	if (strcmp(t->info.name, "null") != 0)
-	{ //当记录的不是null时
-		for (i = 0; i < l; ++i)
-		{ //对应所在层次
+	if (strcmp(t->info.name, "null") != 0) // 当记录的不是null时
+		for (i = 0; i < l; ++i)	// 对应所在层次
 			printf("  ");
-		}
-	}
+
 	if (t == NULL)
 	{
 		printf("null\n");
 		return;
 	}
 	if (t->type == INT)
-	{
 		printf("INT:%d\n", t->info.in);
-	}
 	else if (t->type == FLOAT)
-	{
 		printf("FLOAT:%f\n", t->info.fl);
-	}
 	else if (t->type == ID)
-	{
 		printf("ID:%s\n", t->info.name);
-	}
 	else if (t->type == TYPE)
-	{
 		printf("TYPE:%s\n", t->info.name);
-	}
-	else if (t->type != 0)
-	{ //对应标号的记录值，最开始是从258开始记录的
+	else if (t->type != 0) // 对应标号的记录值，最开始是从258开始记录的
+	{ 
 		printf("%s\n", name[t->type - 258]);
 	}
 	else if (strcmp(t->info.name, "null") == 0) {}
@@ -454,7 +453,7 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-void yyerror(char *msg)
-{ //错误信息
+void yyerror(char *msg)	// 错误信息
+{ 
 	fprintf(stderr, "Error Type B at line %d: %s\n", yylineno, msg);
 }
