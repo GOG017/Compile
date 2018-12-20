@@ -20,8 +20,8 @@ struct ast //二叉树
 	union Info info;
 	int arraymark; //数字标记，是否为数组
 	int rmark;	 //0为左值，1为右值
-	char *typename;
-	char *name;		   //定义的综合属性变量，对于specifier来说name=typename
+	char *Typename;
+	char *name;		   //定义的综合属性变量，对于specifier来说name=Typename
 	char *funcomptype; //函数语句体的类型，如int,float等
 	int type;		   //类型
 	int rlength;	   //用于标记二叉树的右端部分

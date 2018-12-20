@@ -35,7 +35,7 @@ void error4(char *name, int line)
 void error5(struct ast *ast1, struct ast *ast2, int line)
 {
 	//printf("%d = %d\n", ast1->arraymark, ast2->arraymark);
-	if (strcmp(ast1->typename, ast2->typename) != 0 || ast1->arraymark != ast2->arraymark)
+	if (strcmp(ast1->Typename, ast2->Typename) != 0 || ast1->arraymark != ast2->arraymark)
 		printf("Error type 5 at Line %d: Type mismatched for assignment\n", line);
 }
 
@@ -49,7 +49,7 @@ void error6(int type, int line)
 // 操作数类型不匹配或者与操作符不匹配
 void error7(struct ast *ast1, struct ast *ast2, int line)
 {
-	if (strcmp(ast1->typename, ast2->typename) != 0 || ast1->arraymark != ast2->arraymark)
+	if (strcmp(ast1->Typename, ast2->Typename) != 0 || ast1->arraymark != ast2->arraymark)
 		printf("Error type 7 at Line %d: Type mismatched for operands \n", line);
 }
 
@@ -83,9 +83,9 @@ void error11(char *name, int line)
 }
 
 // 数组访问操作符[]出现非整数
-void error12(char *typename, int line)
+void error12(char *Typename, int line)
 {
-	if (strcmp(typename, "int") != 0)
+	if (strcmp(Typename, "int") != 0)
 		printf("Error type 12 at Line %d: Type is not an integer\n", line);
 }
 
